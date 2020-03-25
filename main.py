@@ -64,9 +64,6 @@ def main():
         print("Testing on training data...")
         trainer.test_on_trainings_set()
         print("Testing Finished\n")
-        print("Testing on testing data...")
-        trainer.test()
-        print("Testing Finished\n")
 
 
 if __name__ == "__main__":
