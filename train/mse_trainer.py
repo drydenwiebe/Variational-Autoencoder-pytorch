@@ -64,14 +64,20 @@ class Trainer:
         for i, (data, _) in enumerate(self.test_loader):
             if self.args.cuda:
                 data = data.cuda()
-            data = Variable(data, volatile=True)
+
+            with torch.no_grad():
+           	 data = Variable(data)
+
             recon_batch, mu, logvar = self.model(data)
             test_loss += self.loss(recon_batch, data, mu, logvar).item()
             if i == 0:
                 n = min(data.size(0), 8)
                 comparison = torch.cat([data[:n],
                                         recon_batch.view(-1, 3, 32, 32)[:n]])
-                self.summary_writer.add_image('testing_set/image', comparison, cur_epoch)
+                try:                
+                    self.summary_writer.add_image('testing_set/image', comparison, cur_epoch)
+                except:
+                    continue
 
         test_loss /= len(self.test_loader.dataset)
         print('====> Test set loss: {:.4f}'.format(test_loss))
