@@ -1,13 +1,25 @@
 from torch import nn
+import warnings
+from functools import wraps
 
+# ignoring Pyorch warnings
+def ignore_warnings(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("ignore")
+            response = f(*args, **kwargs)
+        return response
+    return inner
 
 class Initializer:
     def __init__(self):
         pass
-
+    
     @staticmethod
     def initialize(model, initialization, **kwargs):
-
+    	
+        @ignore_warnings
         def weights_init(m):
             if isinstance(m, nn.Conv2d):
                 initialization(m.weight.data, **kwargs)

@@ -67,3 +67,7 @@ class VAE(nn.Module):
         mu, logvar = self.encode(x)
         z = self.reparameterize(mu, logvar)
         return self.decode(z), mu, logvar
+
+    def generate(self):
+        z = noise = torch.randn(512, dtype=torch.float)
+        return self.decode(z)
