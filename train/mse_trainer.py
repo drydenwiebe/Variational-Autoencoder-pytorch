@@ -93,7 +93,7 @@ class Trainer:
                 data = data.cuda()
             data = Variable(data, volatile=True)
             recon_batch, mu, logvar = self.model(data)
-            test_loss += self.loss(recon_batch, data, mu, logvar).data[0]
+            test_loss += self.loss(recon_batch, data, mu, logvar).item()
             if i % 50 == 0:
                 n = min(data.size(0), 8)
                 comparison = torch.cat([data[:n],
